@@ -1,0 +1,10 @@
+*.exe
+*.vcxproj.user
+*.obj
+*.log
+*.pdb
+*.idb
+*.tlog
+*.lastbuildstate
+*.ilk
+*.exe.recipe
