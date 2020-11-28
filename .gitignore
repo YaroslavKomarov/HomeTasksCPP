@@ -8,3 +8,6 @@
 *.lastbuildstate
 *.ilk
 *.exe.recipe
+*.vcxproj
+*.sln
+*.vcxproj.filters

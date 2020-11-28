@@ -3,12 +3,16 @@
 #include "Maze.h"
 using namespace std;
 
-void ChangeMaze(Maze& maze, const int& width, const int& height) {
+int main()
+{
+	const int maze_size = 5;
+	Maze maze = Maze(maze_size, maze_size);
+
 	int ind_right = 0;
 	int ind_down = 1;
-	for (int i = 0; i < width; ++i) {
-		for (int j = 0; j < height; ++j) {
-			if (i == width - 1 && j == height - 1) {
+	for (int i = 0; i < maze_size; ++i) {
+		for (int j = 0; j < maze_size; ++j) {
+			if (i == maze_size - 1 && j == maze_size - 1) {
 				break;
 			}
 			if (i == ind_right && j == ind_right) {
@@ -21,13 +25,6 @@ void ChangeMaze(Maze& maze, const int& width, const int& height) {
 		++ind_down;
 		++ind_right;
 	}
-}
 
-int main()
-{
-	const int maze_size = 5;
-	Maze maze = Maze(maze_size, maze_size);
-	ChangeMaze(maze, maze_size, maze_size);
-	auto res = true << 3 | true << 2;
 	maze.printMaze();
 }
