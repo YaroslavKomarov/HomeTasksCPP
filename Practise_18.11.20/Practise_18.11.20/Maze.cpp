@@ -1,42 +1,16 @@
-#include <iostream>
 #include <algorithm>
+#include <iostream>
 #include "Maze.h"
 using namespace std;
-
-char GetChar(const int& num) {
-	switch (num) {
-	case PrevDown + PrevRight + Down + Right:
-		return char(197);
-	case PrevDown + PrevRight + Down:
-		return char(180);
-	case PrevDown + PrevRight + Right:
-		return char(193);
-	case PrevDown + Down + Right:
-		return char(195);
-	case PrevRight + Down + Right:
-		return char(194);
-	case PrevDown + PrevRight:
-		return char(217);
-	case PrevDown + Down:
-		return char(179);
-	case PrevDown + Right:
-		return char(192);
-	case PrevRight + Down:
-		return char(191);
-	case PrevRight + Right:
-		return char(196);
-	case Right + Down:
-		return char(218);
-	default:
-		return '0';
-		break;
-	}
-}
 
 Maze::Maze(int n, int m) {
 	width = m;
 	size = n * m;
 	m_field = new MCell[size];
+	m_dict = { {AllDirection, char(197)}, {UpLeftDown, char(180)}, {UpLeftRight, char(193)},
+		{UpDownRight, char(195)}, {LeftDownRight, char(194)}, {UpLeft, char(217)},
+		{UpDown, char(179)}, {UpRight, char(192)}, {LeftDown, char(191)},
+		{LeftRight, char(196)}, {RightDown, char(218)}, {Up, '0'}, {Down, '0'}, {Left, '0'}, {Right, '0'} };
 }
 
 Maze::~Maze() { delete[] m_field; }
@@ -95,11 +69,11 @@ void Maze::printMaze() const {
 			res += m_field[(i - 1) * width + j].down() << 0;
 		if (j - 1 >= 0)
 			res += m_field[i * width + j - 1].right() << 1;
-		if (res == 1 || res == 2 || res == 4 || res == 8) {
+
+		if (res == 0 || res == 1 || res == 2 || res == 4 || res == 8)
 			cout << '0';
-		}
 		else
-			cout << GetChar(res);
+			cout << m_dict.find(res)->second;
 
 		if (j + 1 == width)
 			cout << endl;
