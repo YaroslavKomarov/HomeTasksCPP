@@ -20,6 +20,8 @@ const MCell& Maze::cell(int i, int j) const { return m_field[i * width + j]; }
 bool Maze::hasConnection(int i1, int j1, int i2, int j2) {
 	int ind1 = min(i1, i2);
 	int ind2 = min(j1, j2);
+	if (j2 < 0 || j2 >= width || i2 < 0 || i2 >= width)
+		return false;
 	if (i1 == i2) {
 		return m_field[ind1 * width + ind2].right();
 	}
@@ -33,6 +35,8 @@ bool Maze::hasConnection(int i1, int j1, int i2, int j2) {
 bool Maze::makeConnection(int i1, int j1, int i2, int j2) {
 	int ind1 = min(i1, i2);
 	int ind2 = min(j1, j2);
+	if (j2 < 0 || j2 >= width || i2 < 0 || i2 >= width)
+		return false;
 	if (i1 == i2) {
 		m_field[ind1 * width + ind2].m_right = true;
 		return true;
@@ -48,6 +52,8 @@ bool Maze::makeConnection(int i1, int j1, int i2, int j2) {
 bool Maze::removeConnection(int i1, int j1, int i2, int j2) {
 	int ind1 = min(i1, i2);
 	int ind2 = min(j1, j2);
+	if (j2 < 0 || j2 >= width || i2 < 0 || i2 >= width)
+		return false;
 	if (i1 == i2) {
 		m_field[ind1 * width + ind2].m_right = false;
 		return true;
