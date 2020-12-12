@@ -20,6 +20,6 @@ public:
 	const MTreeNode* parent() const;
 	MTreeNode* hasChild(int i, int j);
 	const MTreeNode* child(int i) const;
-	static MTreeNode begintTree(int i, int j);
+	static MTreeNode* begintTree(int i, int j);
 };
 

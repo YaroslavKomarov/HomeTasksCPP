@@ -3,6 +3,24 @@
 #include "Maze.h"
 using namespace std;
 
+enum MazeElem {
+	Up = 1 << 0,
+	Left = 1 << 1,
+	Down = 1 << 2,
+	Right = 1 << 3,
+	UpLeft = Up + Left,
+	UpDown = Up + Down,
+	UpRight = Up + Right,
+	LeftDown = Left + Down,
+	LeftRight = Left + Right,
+	RightDown = Right + Down,
+	UpLeftDown = Up + Left + Down,
+	UpLeftRight = Up + Left + Right,
+	UpDownRight = Up + Down + Right,
+	LeftDownRight = Left + Down + Right,
+	AllDirection = Up + Left + Down + Right,
+};
+
 Maze::Maze(int n, int m) {
 	width = m;
 	size = n * m;
@@ -20,7 +38,7 @@ const MCell& Maze::cell(int i, int j) const { return m_field[i * width + j]; }
 bool Maze::hasConnection(int i1, int j1, int i2, int j2) {
 	int ind1 = min(i1, i2);
 	int ind2 = min(j1, j2);
-	if (j2 < 0 || j2 >= width || i2 < 0 || i2 >= width)
+	if (j2 < 0 || j2 >= width || i2 < 0 || i2 >= size - width)
 		return false;
 	if (i1 == i2) {
 		return m_field[ind1 * width + ind2].right();
@@ -35,7 +53,7 @@ bool Maze::hasConnection(int i1, int j1, int i2, int j2) {
 bool Maze::makeConnection(int i1, int j1, int i2, int j2) {
 	int ind1 = min(i1, i2);
 	int ind2 = min(j1, j2);
-	if (j2 < 0 || j2 >= width || i2 < 0 || i2 >= width)
+	if (j2 < 0 || j2 >= width || i2 < 0 || i2 >= size - width)
 		return false;
 	if (i1 == i2) {
 		m_field[ind1 * width + ind2].m_right = true;
@@ -52,7 +70,7 @@ bool Maze::makeConnection(int i1, int j1, int i2, int j2) {
 bool Maze::removeConnection(int i1, int j1, int i2, int j2) {
 	int ind1 = min(i1, i2);
 	int ind2 = min(j1, j2);
-	if (j2 < 0 || j2 >= width || i2 < 0 || i2 >= width)
+	if (j2 < 0 || j2 >= width || i2 < 0 || i2 >= size - width)
 		return false;
 	if (i1 == i2) {
 		m_field[ind1 * width + ind2].m_right = false;
@@ -70,7 +88,10 @@ void Maze::printMaze() const {
 	for (int n = 0; n < size; ++n) {
 		int i = n / width;
 		int j = n % width;
-		int res = m_field[n].right() << 3 | m_field[n].down() << 2;
+		int temp1 = m_field[n].down() << 2;
+		int temp2 = m_field[n].right() << 3;
+		int temp3 = temp2 | temp1;
+		int res = temp1 | temp2;
 		if (i - 1 >= 0)
 			res += m_field[(i - 1) * width + j].down() << 0;
 		if (j - 1 >= 0)

@@ -1,13 +1,14 @@
 #include <algorithm>
 #include <iostream>
+#include <queue>
 #include "MTreeNode.h"
 using namespace std;
 
-MTreeNode MTreeNode::begintTree(int i, int j) {
-	MTreeNode node = MTreeNode(nullptr);
-	node.m_distance = i + j;
-	node.m_i = i;
-	node.m_j = j;
+MTreeNode* MTreeNode::begintTree(int i, int j) {
+	MTreeNode* node = new MTreeNode(nullptr);
+	node->m_distance = 0;
+	node->m_i = i;
+	node->m_j = j;
 	return node;
 }
 
@@ -39,7 +40,7 @@ bool MTreeNode::addChild(int i, int j) {
 	if (abs(i - m_i + j - m_j) != 1)
 		return false;
 	m_children.push_back(new MTreeNode(this));
-	m_children[m_children.size() - 1]->m_distance = i + j;
+	m_children[m_children.size() - 1]->m_distance = this->m_distance + 1;
 	m_children[m_children.size() - 1]->m_i = i;
 	m_children[m_children.size() - 1]->m_j = j;
 	return true;
