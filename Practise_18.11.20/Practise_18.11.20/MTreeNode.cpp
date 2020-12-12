@@ -55,3 +55,37 @@ MTreeNode* MTreeNode::hasChild(int i, int j) {
 	}
 	return nullptr;
 }
+
+MTreeNode* MTreeNode::searchNode(const MTreeNode& tree, const int i, const int j) {
+	queue<MTreeNode*> nodes;
+	MTreeNode* parent = tree.m_parent;
+	if (parent) {
+		if (parent->i() == i && parent->j() == j)
+			return parent;
+		while (true) {
+			MTreeNode* temp = parent->m_parent;
+			if (!temp) break;
+			parent = temp;
+		}
+		while (true)
+		{
+			for (const auto child : parent->m_children) {
+				nodes.push(child);
+				if (child->i() == i && child->j() == j)
+					return child;
+			}
+			if (nodes.size() == 0)
+				break;
+			parent = nodes.front();
+			nodes.pop();
+		}
+	}
+	else {
+		for (const auto child : tree.m_children) {
+			nodes.push(child);
+			if (child->i() == i && child->j() == j)
+				return child;
+		}
+	}
+	return nullptr;
+}

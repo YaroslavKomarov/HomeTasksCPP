@@ -21,5 +21,6 @@ public:
 	MTreeNode* hasChild(int i, int j);
 	const MTreeNode* child(int i) const;
 	static MTreeNode* begintTree(int i, int j);
+	static MTreeNode* searchNode(const MTreeNode& tree, const int i, const int j);
 };
 
