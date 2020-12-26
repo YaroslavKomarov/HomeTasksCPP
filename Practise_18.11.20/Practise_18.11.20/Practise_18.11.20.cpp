@@ -10,39 +10,39 @@
 using namespace std;
 
 void buildFullMaze(Maze& iMaze, const MTreeNode* tree);
-void BuildMaze2(Maze& maze, const int& maze_size);
-void BuildMaze1(Maze& maze, const int& maze_size);
-void GetTree(MTreeNode* node, const int& width, const int& height);
-void GetTreeForMaze2(Maze& maze, const int& maze_size, MTreeNode* node);
-void PrintTreeInfo(const MTreeNode* tree, const int& width, const int& height);
-vector<int> GetRandCoordinates(const int& width, const int& height);
+void BuildMaze2(Maze& maze, const int maze_size);
+void BuildMaze1(Maze& maze, const int maze_size);
+void BuildTree(MTreeNode* node, const int width, const int height);
+void BuildTreeForMaze2(Maze& maze, const int  maze_size, MTreeNode* node);
+void PrintTreeInfo(const MTreeNode* tree, const int width, const int height);
+vector<int> GetRandCoordinates(const int width, const int height);
 
-void PrintTreeInfo(const MTreeNode* tree, const int& width, const int& height) {
+void PrintTreeInfo(const MTreeNode* tree, const int width, const int height) {
 	int sum_weights = 0;
 	int max_weight = 0;
 	queue<const MTreeNode*> nodes;
 	vector<vector<string>> to_print(height);
 	for (auto& vctr : to_print)
 		vctr = vector<string>(width);
-	while (true) {
+	for (int p = 0; p < width * height; ++p) {
 		int i = tree->i();
 		int j = tree->j();
 		sum_weights += tree->distance();
-		max_weight = tree->distance() > max_weight ? tree->distance() : max_weight;
+		max_weight = max(tree->distance(), max_weight);
 		to_print[i][j] = to_string(tree->distance());
 		for (int ind = 0; ind < tree->childCount(); ++ind)
 			nodes.push(tree->child(ind));
-		if (nodes.size() == 0)
-			break;
+		if (p + 1 == width * height) break;
 		tree = nodes.front();
 		nodes.pop();
 	}
+	const int max_len = size(to_string(max_weight));
 	for (auto& vctr : to_print) {
 		for (auto& str : vctr)
-			cout << setw(5) << str;
+			cout << setw(max_len + 1) << str;
 		cout << endl;
 	}
-	int average_weight = sum_weights / (1. * width * height);
+	const int average_weight = sum_weights / (1. * width * height);
 	cout << endl << "The maximum weight of tree vertices: " << max_weight << endl;
 	cout << endl << "The average weight of the vertices: " << average_weight << endl;
 }
@@ -64,7 +64,7 @@ void buildFullMaze(Maze& iMaze, const MTreeNode* tree) {
 	}
 }
 
-vector<int> GetRandCoordinates(const int& width, const int& height) {
+vector<int> GetRandCoordinates(const int width, const int height) {
 	if (width == 0 || height == 0)
 		return { 0, 0 };
 	srand(time(NULL));
@@ -81,7 +81,7 @@ vector<int> GetRandCoordinates(const int& width, const int& height) {
 	}
 }
 
-void GetTree(MTreeNode* tree, const int& width, const int& height) {
+void BuildTree(MTreeNode* tree, const int width, const int height) {
 	queue<MTreeNode*> nodes;
 	while (true) {
 		int n_i = tree->i();
@@ -94,7 +94,7 @@ void GetTree(MTreeNode* tree, const int& width, const int& height) {
 					continue;
 				int child_i = n_i + i;
 				int child_j = n_j + j;
-				if (!MTreeNode::searchNode(*tree, child_i, child_j)) {
+				if (!tree->searchNode(child_i, child_j)) {
 					tree->addChild(child_i, child_j);
 					MTreeNode* child = tree->hasChild(child_i, child_j);
 					nodes.push(child);
@@ -107,7 +107,7 @@ void GetTree(MTreeNode* tree, const int& width, const int& height) {
 	}
 }
 
-void BuildMaze2(Maze& maze, const int& maze_size) {
+void BuildMaze2(Maze& maze, const int maze_size) {
 	int ind_right = 0;
 	int ind_down = 0;
 	for (int i = 0; i < maze_size - 1; ++i) {
@@ -126,7 +126,7 @@ void BuildMaze2(Maze& maze, const int& maze_size) {
 	}
 }
 
-void BuildMaze1(Maze& maze, const int& maze_size) {
+void BuildMaze1(Maze& maze, const int maze_size) {
 	int ind_right = 0;
 	int ind_down = 1;
 	for (int i = 0; i < maze_size; ++i) {
@@ -146,7 +146,7 @@ void BuildMaze1(Maze& maze, const int& maze_size) {
 	}
 }
 
-void GetTreeForMaze2(Maze& maze, const int& maze_size, MTreeNode* node) {
+void BuildTreeForMaze2(Maze& maze, const int maze_size, MTreeNode* node) {
 	vector<string> strings;
 	queue<MTreeNode*> nodes;
 	while (true) {
@@ -189,16 +189,16 @@ int main()
 
 	MTreeNode* start_node = MTreeNode::begintTree(0, 0);
 	cout << endl << "Node tree for Maze #2:" << endl << endl;
-	GetTreeForMaze2(maze2, maze_size, start_node);	//Построение и печать дерева обхода для лабиринта паутинки-лесенки
+	BuildTreeForMaze2(maze2, maze_size, start_node);	//Построение и печать дерева обхода для лабиринта паутинки-лесенки
 	delete start_node;
 
 	int width, height;
 	cout << endl << "Enter the height and width of the maze separated by a space: ";
 	cin >> height >> width;		//Считывание размеров случайного лабиринта
 
-	auto start_coordinates = GetRandCoordinates(width, height);
+	auto start_coordinates = GetRandCoordinates(width, height);//Функция для получения произвольных координат на границе лабиринта
 	MTreeNode* tree = MTreeNode::begintTree(start_coordinates[0], start_coordinates[1]);
-	GetTree(tree, width, height);	//Построение дерева для случайного лабиринта заданного размера
+	BuildTree(tree, width, height);	//Построение дерева для случайного лабиринта заданного размера
 	Maze maze3 = Maze(height, width);
 	buildFullMaze(maze3, tree);	//Создание лабиринта по дереву
 	cout << endl << "Maze #3:" << endl << endl;
