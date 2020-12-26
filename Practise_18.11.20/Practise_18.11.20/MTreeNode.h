@@ -1,6 +1,5 @@
 #pragma once
 #include <vector>
-using namespace std;
 
 class MTreeNode
 {
@@ -21,7 +20,7 @@ private:
 	int m_i, m_j = 0;
 	int m_distance = 0;
 	MTreeNode* m_parent = nullptr;
-	vector<MTreeNode*> m_children;
+	std::vector<MTreeNode*> m_children;
 	MTreeNode(MTreeNode* parent);
 };
 
