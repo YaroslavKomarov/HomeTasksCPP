@@ -37,14 +37,20 @@ Maze::Maze(int n, int m) {
 Maze::~Maze() { delete[] m_field; }
 
 const MCell& Maze::cell(int i, int j) const { 
-	assert(i >= 0);
-	assert(j >= 0);
+	assert(i >= 0 && i < m_height && j >= 0 && j < m_width);
 	return m_field[i * m_width + j]; 
 }
 
-bool Maze::hasConnection(int i1, int j1, int i2, int j2) const {
-	if ((abs(i1 - i2) + abs(j1 - j2) != 1)) return false;
+bool Maze::checkConnection(int i1, int j1, int i2, int j2) const {
+	assert(i1 == i2 || j1 == j2);
+	if ((abs(i1 - i2) + abs(j1 - j2) != 1)) 
+		return false;
 	if (j2 < 0 || j2 >= m_width || i2 < 0 || i2 >= m_height)
+		return false;
+}
+
+bool Maze::hasConnection(int i1, int j1, int i2, int j2) const {
+	if (!checkConnection(i1, j1, i2, j2))
 		return false;
 	const int ind1 = min(i1, i2);
 	const int ind2 = min(j1, j2);
@@ -54,16 +60,13 @@ bool Maze::hasConnection(int i1, int j1, int i2, int j2) const {
 	else if (j2 == j1) {
 		return m_field[ind1 * m_width + ind2].down();
 	}
-	else
-		return false;
 }
 
 bool Maze::makeConnection(int i1, int j1, int i2, int j2) {
-	if ((abs(i1 - i2) + abs(j1 - j2) != 1)) return false;
-	if (j2 < 0 || j2 >= m_width || i2 < 0 || i2 >= m_height)
+	if (!checkConnection(i1, j1, i2, j2))
 		return false;
-	int ind1 = min(i1, i2);
-	int ind2 = min(j1, j2);
+	const int ind1 = min(i1, i2);
+	const int ind2 = min(j1, j2);
 	if (i1 == i2) {
 		m_field[ind1 * m_width + ind2].m_right = true;
 		return true;
@@ -72,13 +75,10 @@ bool Maze::makeConnection(int i1, int j1, int i2, int j2) {
 		m_field[ind1 * m_width + ind2].m_down = true;
 		return true;
 	}
-	else
-		return false;
 }
 
 bool Maze::removeConnection(int i1, int j1, int i2, int j2) {
-	if ((abs(i1 - i2) + abs(j1 - j2) != 1)) return false;
-	if (j2 < 0 || j2 >= m_width || i2 < 0 || i2 >= m_height)
+	if (!checkConnection(i1, j1, i2, j2))
 		return false;
 	int ind1 = min(i1, i2);
 	int ind2 = min(j1, j2);
@@ -92,8 +92,6 @@ bool Maze::removeConnection(int i1, int j1, int i2, int j2) {
 		m_field[ind1 * m_width + ind2].m_down = false;
 		return res;
 	}
-	else
-		return false;
 }
 
 void Maze::printMaze() const {

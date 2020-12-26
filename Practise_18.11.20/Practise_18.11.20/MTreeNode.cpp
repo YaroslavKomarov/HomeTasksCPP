@@ -13,7 +13,7 @@ MTreeNode* MTreeNode::begintTree(int i, int j) {
 
 MTreeNode::MTreeNode(MTreeNode* parent) {
 	m_parent = parent;
-	m_distance = parent == nullptr ? 0 : parent->m_distance + 1;
+	if (parent) m_distance = parent->m_distance + 1;
 }
 
 MTreeNode::~MTreeNode() {
@@ -29,21 +29,20 @@ bool MTreeNode::addChild(int i, int j) {
 		if (child->m_i == i && child->m_j == j)
 			return false;
 	m_children.push_back(new MTreeNode(this));
-	m_children[m_children.size() - 1]->m_distance = this->m_distance + 1;
-	m_children[m_children.size() - 1]->m_i = i;
-	m_children[m_children.size() - 1]->m_j = j;
+	m_children.back()->m_i = i;
+	m_children.back()->m_j = j;
 	return true;
 }
 
 MTreeNode* MTreeNode::hasChild(int i, int j) const{
-	const int count = m_children.size();
-	for (auto child : m_children){
+	for (auto &child : m_children){
 		if (child->m_i == i && child->m_j == j)
 			return child;
 	}
 	return nullptr;
 }
 
+//Метод, реализующий поиск узла в дереве начиная от корня
 const MTreeNode* MTreeNode::searchNode(const int i, const int j) {
 	queue<MTreeNode*> nodes;
 	auto node = searchRoot(this);
@@ -60,13 +59,15 @@ const MTreeNode* MTreeNode::searchNode(const int i, const int j) {
 		node = nodes.front();
 		nodes.pop();
 	}
-	return nullptr;
 }
 
+//Метод поиска корня в дерве
 const MTreeNode* MTreeNode::searchRoot(const MTreeNode* node) {
 	queue<MTreeNode*> nodes;
 	MTreeNode* parent = node->m_parent;
-	if (parent) {
+	if (!parent) 
+		return node; 
+	else {
 		while (true) {
 			MTreeNode* temp = parent->m_parent;
 			if (!temp) break;
@@ -74,5 +75,4 @@ const MTreeNode* MTreeNode::searchRoot(const MTreeNode* node) {
 		}
 		return parent;
 	}
-	else return node;
 }
