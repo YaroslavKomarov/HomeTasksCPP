@@ -13,7 +13,7 @@ MTreeNode* MTreeNode::begintTree(int i, int j) {
 
 MTreeNode::MTreeNode(MTreeNode* parent) {
 	m_parent = parent;
-	m_distance = parent == nullptr ? 0 : parent->m_distance;
+	m_distance = parent == nullptr ? 0 : parent->m_distance + 1;
 }
 
 MTreeNode::~MTreeNode() {
