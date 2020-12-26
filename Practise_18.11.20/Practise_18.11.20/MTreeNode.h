@@ -23,4 +23,3 @@ private:
 	std::vector<MTreeNode*> m_children;
 	MTreeNode(MTreeNode* parent);
 };
-
