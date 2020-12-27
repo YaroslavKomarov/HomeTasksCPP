@@ -13,9 +13,9 @@ public:
 	const MTreeNode* parent() const { return m_parent; }
 	MTreeNode* hasChild(int i, int j) const;
 	const MTreeNode* child(int i) const { return m_children[i]; }
-	static MTreeNode* begintTree(int i, int j);
-	const MTreeNode* searchNode(const int i, const int j);
-	const MTreeNode* searchRoot(const MTreeNode* node);
+	static MTreeNode* beginTree(int i, int j);
+	const MTreeNode* searchNode(const int i, const int j) const;
+	const MTreeNode* searchRoot(const MTreeNode* node) const;
 private:
 	int m_i, m_j = 0;
 	int m_distance = 0;

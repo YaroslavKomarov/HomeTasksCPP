@@ -177,17 +177,17 @@ void BuildTreeForMaze2(Maze& maze, const int maze_size, MTreeNode* node) {
 int main()
 {
 	const int maze_size = 5;
-	Maze maze1 = Maze(maze_size, maze_size);
+	Maze maze1(maze_size, maze_size);
 	BuildMaze1(maze1, maze_size);	//Построение простого лабиринта-лесенки
 	cout << "Maze #1:" << endl << endl;
 	maze1.printMaze();	//Печать лабиринта-лесенки
 
-	Maze maze2 = Maze(maze_size, maze_size);
+	Maze maze2(maze_size, maze_size);
 	BuildMaze2(maze2, maze_size);	//Построение лабиринта паутинки-лесенки
 	cout << endl << "Maze #2:" << endl << endl;
 	maze2.printMaze();	//Печать лабиринта паутинки-лесенки
 
-	MTreeNode* start_node = MTreeNode::begintTree(0, 0);
+	MTreeNode* start_node = MTreeNode::beginTree(0, 0);
 	cout << endl << "Node tree for Maze #2:" << endl << endl;
 	BuildTreeForMaze2(maze2, maze_size, start_node);	//Построение и печать дерева обхода для лабиринта паутинки-лесенки
 	delete start_node;
@@ -197,9 +197,9 @@ int main()
 	cin >> height >> width;		//Считывание размеров случайного лабиринта
 
 	auto start_coordinates = GetRandCoordinates(width, height);//Функция для получения произвольных координат на границе лабиринта
-	MTreeNode* tree = MTreeNode::begintTree(start_coordinates[0], start_coordinates[1]);
+	MTreeNode* tree = MTreeNode::beginTree(start_coordinates[0], start_coordinates[1]);
 	BuildTree(tree, width, height);	//Построение дерева для случайного лабиринта заданного размера
-	Maze maze3 = Maze(height, width);
+	Maze maze3(height, width);
 	buildFullMaze(maze3, tree);	//Создание лабиринта по дереву
 	cout << endl << "Maze #3:" << endl << endl;
 	maze3.printMaze();	//Печать случайного лабиринта заданного размера

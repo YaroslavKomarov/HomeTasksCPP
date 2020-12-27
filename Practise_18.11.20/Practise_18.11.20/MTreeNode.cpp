@@ -4,7 +4,7 @@
 #include "MTreeNode.h"
 using namespace std;
 
-MTreeNode* MTreeNode::begintTree(int i, int j) {
+MTreeNode* MTreeNode::beginTree(int i, int j) {
 	MTreeNode* node = new MTreeNode(nullptr);
 	node->m_i = i;
 	node->m_j = j;
@@ -35,7 +35,7 @@ bool MTreeNode::addChild(int i, int j) {
 }
 
 MTreeNode* MTreeNode::hasChild(int i, int j) const{
-	for (auto &child : m_children){
+	for (auto child : m_children){
 		if (child->m_i == i && child->m_j == j)
 			return child;
 	}
@@ -43,7 +43,7 @@ MTreeNode* MTreeNode::hasChild(int i, int j) const{
 }
 
 //Метод, реализующий поиск узла в дереве начиная от корня
-const MTreeNode* MTreeNode::searchNode(const int i, const int j) {
+const MTreeNode* MTreeNode::searchNode(const int i, const int j) const{
 	queue<MTreeNode*> nodes;
 	auto node = searchRoot(this);
 	while (true)
@@ -62,7 +62,7 @@ const MTreeNode* MTreeNode::searchNode(const int i, const int j) {
 }
 
 //Метод поиска корня в дерве
-const MTreeNode* MTreeNode::searchRoot(const MTreeNode* node) {
+const MTreeNode* MTreeNode::searchRoot(const MTreeNode* node) const{
 	queue<MTreeNode*> nodes;
 	MTreeNode* parent = node->m_parent;
 	if (!parent) 
